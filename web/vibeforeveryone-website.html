@@ -1,0 +1,2363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe For Everyone - From English to Working SaaS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+    <script>
+        // =====================================================
+        // GITHUB CONTENT CONFIGURATION
+        // Change these two values to point to your GitHub repo
+        // =====================================================
+        const GITHUB_USER   = 'YOUR_GITHUB_USERNAME';
+        const GITHUB_REPO   = 'YOUR_REPO_NAME';
+        const GITHUB_BRANCH = 'main';
+        // Folder inside your repo where whitepapers live (use '' for root)
+        const GITHUB_FOLDER = 'whitepapers';
+        // =====================================================
+        // Do not edit below this line
+        // =====================================================
+        const GITHUB_RAW_BASE = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${GITHUB_FOLDER ? GITHUB_FOLDER + '/' : ''}`;
+        const MANIFEST_URL    = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/manifest.json`;
+    </script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --accent: #22d3ee;
+            --accent-warm: #f97316;
+            --dark: #0f0f23;
+            --dark-surface: #1a1a2e;
+            --dark-card: #16213e;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --gradient-hero: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+            --gradient-accent: linear-gradient(90deg, #22d3ee 0%, #6366f1 100%);
+            --glow: 0 0 60px rgba(99, 102, 241, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(15, 15, 35, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-primary);
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        .nav-cta {
+            background: var(--gradient-hero);
+            color: white !important;
+            padding: 0.6rem 1.5rem !important;
+            border-radius: 50px !important;
+            font-weight: 600 !important;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        /* Page Container */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 4rem 2rem;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(217, 70, 239, 0.05) 0%, transparent 60%);
+            animation: heroGlow 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes heroGlow {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-5%, 5%) rotate(3deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 0.5rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .hero-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero-title .gradient {
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-highlight {
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        /* CTA Buttons */
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2.5rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-hero);
+            color: white;
+            box-shadow: 0 4px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 40px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
+        }
+
+        /* Requirements Box */
+        .requirements-section {
+            padding: 6rem 2rem;
+            background: var(--dark-surface);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .requirements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .req-card {
+            background: var(--dark-card);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .req-card:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .req-card.highlight {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+        }
+
+        .req-phase {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .req-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .req-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .req-price {
+            margin-top: 1rem;
+            font-family: 'Space Mono', monospace;
+            color: var(--accent-warm);
+            font-weight: 700;
+        }
+
+        /* Options Section */
+        .options-section {
+            padding: 6rem 2rem;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .option-card {
+            background: var(--dark-card);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 2px solid rgba(99, 102, 241, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-hero);
+        }
+
+        .option-number {
+            font-family: 'Syne', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0.3;
+            position: absolute;
+            top: 1rem;
+            right: 2rem;
+        }
+
+        .option-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .option-desc {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .option-features {
+            list-style: none;
+        }
+
+        .option-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .option-features li::before {
+            content: 'â†’';
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .specials-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            color: var(--accent-warm);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .specials-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Page Sections */
+        .page-header {
+            padding: 6rem 2rem 3rem;
+            text-align: center;
+            background: linear-gradient(180deg, var(--dark-surface) 0%, var(--dark) 100%);
+        }
+
+        .page-header h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .page-content {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background: var(--dark-card);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .comparison-table th {
+            background: rgba(99, 102, 241, 0.2);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-primary);
+        }
+
+        .comparison-table tr:hover td {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .check {
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        .partial {
+            color: #f59e0b;
+        }
+
+        .no {
+            color: var(--text-muted);
+        }
+
+        /* TOC List */
+        .toc-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .toc-item {
+            background: var(--dark-card);
+            border-radius: 12px;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .toc-item:hover {
+            border-color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .toc-item a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .toc-item .number {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent);
+            background: rgba(34, 211, 238, 0.1);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+        }
+
+        .toc-item .title {
+            font-weight: 600;
+        }
+
+        .toc-item .arrow {
+            margin-left: auto;
+            color: var(--text-muted);
+        }
+
+        /* Placeholder Notice */
+        .placeholder-notice {
+            background: rgba(249, 115, 22, 0.1);
+            border: 1px dashed var(--accent-warm);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--accent-warm);
+        }
+
+        /* Training Cards */
+        .training-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .training-card {
+            background: var(--dark-card);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            position: relative;
+        }
+
+        .training-card.featured {
+            border-color: var(--accent);
+        }
+
+        .training-badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: var(--accent);
+            color: var(--dark);
+            padding: 0.25rem 1rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .training-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .training-desc {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .training-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .training-price {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .training-price.free {
+            color: #22c55e;
+        }
+
+        .training-date {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Personnel Grid */
+        .personnel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .person-card {
+            background: var(--dark-card);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .person-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--gradient-hero);
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .person-name {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .person-role {
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .person-bio {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--dark-card);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Vibe Studio Feature */
+        .studio-feature {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin: 3rem 0;
+        }
+
+        .studio-visual {
+            background: var(--dark-card);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            position: relative;
+        }
+
+        .studio-visual::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 24px;
+            padding: 1px;
+            background: var(--gradient-hero);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+
+        .flow-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 12px;
+        }
+
+        .flow-step .icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: var(--gradient-hero);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .flow-step .text {
+            flex: 1;
+        }
+
+        .flow-step .label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .flow-step .value {
+            font-weight: 600;
+        }
+
+        .flow-arrow {
+            text-align: center;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        /* Partner List */
+        .partner-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .partner-card {
+            background: var(--dark-card);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .partner-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .partner-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .partner-card .tag {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(34, 211, 238, 0.1);
+            color: var(--accent);
+            border-radius: 50px;
+            font-size: 0.75rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark-surface);
+            padding: 4rem 2rem 2rem;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .footer-brand .logo {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer-col h4 {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .footer-col a {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.4rem 0;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .studio-feature {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        /* Pricing Card */
+        .pricing-section {
+            padding: 4rem 2rem;
+        }
+
+        .pricing-card {
+            max-width: 500px;
+            margin: 0 auto;
+            background: var(--dark-card);
+            border-radius: 24px;
+            padding: 3rem;
+            border: 2px solid var(--primary);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-hero);
+        }
+
+        .pricing-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-family: 'Space Mono', monospace;
+            font-size: 4rem;
+            font-weight: 700;
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pricing-period {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .pricing-features li::before {
+            content: 'âœ“';
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        /* Markdown Reader */
+        .wp-reader {
+            max-width: 800px;
+        }
+
+        .wp-reader h1, .wp-reader h2, .wp-reader h3, .wp-reader h4 {
+            font-family: 'Syne', sans-serif;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .wp-reader h1 { font-size: 2rem; }
+        .wp-reader h2 { font-size: 1.5rem; border-bottom: 1px solid rgba(99,102,241,0.2); padding-bottom: 0.5rem; }
+        .wp-reader h3 { font-size: 1.2rem; color: var(--accent); }
+
+        .wp-reader p {
+            color: var(--text-secondary);
+            line-height: 1.9;
+            margin-bottom: 1.25rem;
+        }
+
+        .wp-reader ul, .wp-reader ol {
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            margin-bottom: 1.25rem;
+            line-height: 1.9;
+        }
+
+        .wp-reader li { margin-bottom: 0.4rem; }
+
+        .wp-reader code {
+            background: rgba(99,102,241,0.15);
+            color: var(--accent);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85em;
+        }
+
+        .wp-reader pre {
+            background: var(--dark-card);
+            border: 1px solid rgba(99,102,241,0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .wp-reader pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-primary);
+        }
+
+        .wp-reader blockquote {
+            border-left: 3px solid var(--primary);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .wp-reader table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            background: var(--dark-card);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .wp-reader th {
+            background: rgba(99,102,241,0.2);
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .wp-reader td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-secondary);
+        }
+
+        .wp-reader a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .wp-reader a:hover { text-decoration: underline; }
+
+        .wp-reader hr {
+            border: none;
+            border-top: 1px solid rgba(99,102,241,0.2);
+            margin: 2rem 0;
+        }
+
+        .wp-reader strong { color: var(--text-primary); }
+
+        /* Loading / Error states */
+        .wp-loading {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 3rem;
+            color: var(--text-muted);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .wp-spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(99,102,241,0.3);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .wp-error {
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: #f87171;
+            font-size: 0.95rem;
+        }
+
+        /* Config reminder banner */
+        .config-banner {
+            background: rgba(249,115,22,0.15);
+            border: 1px dashed var(--accent-warm);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--accent-warm);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.82rem;
+            display: none;
+        }
+
+        .config-banner.visible { display: block; }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 1001;
+        }
+
+        @media (max-width: 1200px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(15, 15, 35, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 1rem;
+                border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+                gap: 0.25rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                padding: 0.75rem 1rem;
+                border-radius: 8px;
+                width: 100%;
+            }
+
+            .nav-links a:hover {
+                background: rgba(99, 102, 241, 0.15);
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="logo">VibeForEveryone</div>
+            <div class="nav-links">
+                <a href="#" onclick="showPage('main')" class="active">Home</a>
+                <a href="#" onclick="showPage('purchase')">Purchase</a>
+                <a href="#" onclick="showPage('comparison')">Compare</a>
+                <a href="#" onclick="showPage('vibe-studio')">Vibe Studio</a>
+                <a href="#" onclick="showPage('examples')">Examples</a>
+                <a href="#" onclick="showPage('whitepapers')">White Papers</a>
+                <a href="#" onclick="showPage('how-to-vibe')">How to Vibe</a>
+                <a href="#" onclick="showPage('revenue')">Revenue Guide</a>
+                <a href="#" onclick="showPage('training')">Training</a>
+                <a href="#" onclick="showPage('partners')">Partners</a>
+                <a href="#" onclick="showPage('consulting')">Consulting</a>
+                <a href="#" onclick="showPage('help')">Help</a>
+                <a href="#" onclick="showPage('contact')" class="nav-cta">Contact</a>
+            </div>
+            <button class="mobile-menu-toggle">â˜°</button>
+        </div>
+    </nav>
+
+    <!-- MAIN PAGE -->
+    <div id="main" class="page active">
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-badge">ðŸš€ No Coding Required</div>
+                <h1 class="hero-title">
+                    From <span class="gradient">English</span> to a Working,<br>
+                    Billable <span class="gradient">SaaS Product</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Ideal for the <span class="hero-highlight">non-technical founder</span>. 
+                    Describe your product in plain English, and our AI-powered platform 
+                    transforms it into production-ready software.
+                </p>
+                <div class="cta-group">
+                    <a href="#" onclick="showPage('prerequisites')" class="btn btn-primary">Prerequisites</a>
+                    <a href="#" onclick="showPage('how-to-vibe')" class="btn btn-secondary">Learn How It Works</a>
+                    <a href="#" onclick="showPage('purchase')" class="btn btn-secondary">Get Started â€” $120</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="requirements-section">
+            <div class="container">
+                <h2 class="section-title">What You'll Need</h2>
+                
+                <h3 style="color: var(--accent); margin-bottom: 1.5rem; font-family: 'Space Mono', monospace; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em;">For Prototyping (Free)</h3>
+                <div class="requirements-grid" style="margin-bottom: 3rem;">
+                    <div class="req-card">
+                        <div class="req-phase">Development</div>
+                        <div class="req-title">Amazon AWS Account</div>
+                        <div class="req-desc">No cost during development â€” you'll use AWS free tier resources</div>
+                        <div class="req-price">$0</div>
+                    </div>
+                </div>
+
+                <h3 style="color: var(--accent); margin-bottom: 1.5rem; font-family: 'Space Mono', monospace; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em;">To Go Public</h3>
+                <div class="requirements-grid">
+                    <div class="req-card highlight">
+                        <div class="req-phase">Framework</div>
+                        <div class="req-title">VibeForEveryone License</div>
+                        <div class="req-desc">Full access to our framework, Vibe Studio, and deployment tools</div>
+                        <div class="req-price">$120 intro pricing</div>
+                    </div>
+                    <div class="req-card">
+                        <div class="req-phase">AI Engine</div>
+                        <div class="req-title">Claude AI Account</div>
+                        <div class="req-desc">We recommend the Pro plan for best results</div>
+                        <div class="req-price">$20/month</div>
+                    </div>
+                    <div class="req-card">
+                        <div class="req-phase">Payments</div>
+                        <div class="req-title">Payment Processor</div>
+                        <div class="req-desc">Stripe, PayPal, or similar for credit card processing</div>
+                        <div class="req-price">Pay as you go</div>
+                    </div>
+                    <div class="req-card">
+                        <div class="req-phase">Identity</div>
+                        <div class="req-title">Registered Domain</div>
+                        <div class="req-desc">Your own website address for your SaaS product</div>
+                        <div class="req-price">~$12/year</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="options-section">
+            <div class="container">
+                <h2 class="section-title">Your Path to a SaaS Product</h2>
+                <div class="options-grid">
+                    <div class="option-card">
+                        <div class="option-number">01</div>
+                        <h3 class="option-title">DIY with Vibe Studio</h3>
+                        <p class="option-desc">Build it yourself using natural language. No coding required.</p>
+                        <ul class="option-features">
+                            <li>Develop your English language product specification</li>
+                            <li>Feed it into AI to produce well-architected React & Python code</li>
+                            <li>Use our Vibe Studio Builder / Deployer</li>
+                            <li>Deploy directly to AWS</li>
+                            <li>Start collecting revenue</li>
+                        </ul>
+                        <a href="#" onclick="showPage('vibe-studio')" class="btn btn-secondary" style="margin-top: 2rem;">Learn About Vibe Studio â†’</a>
+                    </div>
+                    <div class="option-card">
+                        <div class="option-number">02</div>
+                        <h3 class="option-title">Rapid Consulting</h3>
+                        <p class="option-desc">Let our experts build it for you with lightning-fast turnaround.</p>
+                        <ul class="option-features">
+                            <li>Share your product vision with our team</li>
+                            <li>We architect and build your SaaS</li>
+                            <li>Up and running in under 2 weeks</li>
+                            <li>Full handoff with documentation</li>
+                            <li>Optional ongoing support</li>
+                        </ul>
+                        <a href="#" onclick="showPage('consulting')" class="specials-link">ðŸ”¥ View Current Specials</a>
+                        <br>
+                        <a href="#" onclick="showPage('consulting')" class="btn btn-primary" style="margin-top: 1rem;">Talk to Consulting â†’</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PURCHASE PAGE -->
+    <div id="purchase" class="page">
+        <div class="page-header">
+            <h1>Get Your License</h1>
+            <p>Start building your SaaS product today with the VibeForEveryone Framework</p>
+        </div>
+        <div class="pricing-section">
+            <div class="pricing-card">
+                <div class="pricing-name">VibeForEveryone Framework License</div>
+                <div class="pricing-price">$120</div>
+                <div class="pricing-period">Introductory Pricing â€¢ One-time payment</div>
+                <ul class="pricing-features">
+                    <li>Full VibeForEveryone Framework access</li>
+                    <li>Vibe Studio Builder & Deployer</li>
+                    <li>AWS deployment templates</li>
+                    <li>React & Python code generation</li>
+                    <li>Payment processor integration</li>
+                    <li>User authentication & management</li>
+                    <li>Community support access</li>
+                    <li>Future updates included</li>
+                </ul>
+                <button class="btn btn-primary" style="width: 100%;">Purchase License</button>
+                <p style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-muted);">
+                    Secure checkout â€¢ Instant access â€¢ 30-day money-back guarantee
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PREREQUISITES PAGE -->
+    <div id="prerequisites" class="page">
+        <div class="page-header">
+            <h1>Prerequisites</h1>
+            <p>What you need before getting started with VibeForEveryone</p>
+        </div>
+        <div class="pricing-section">
+            <div class="pricing-card">
+                <div class="pricing-name">Before You Begin</div>
+                <div style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 2rem;">
+                    Be prepared to have the following ready
+                </div>
+                <ul class="pricing-features">
+                    <li>An Amazon AWS account ((Credit Card needed to register - $0 a month) Most work can be done on free tier)</li>
+                    <li>A Windows-based PC (Your product will run anywhere, but our system is set up for Windows)</li>
+                </ul>
+                <div class="pricing-name">Other Needs</div>
+                <div style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 2rem;">
+                    Will be needed as you progress
+                </div>
+                <ul class="pricing-features">
+                    <li>Claude AI Account (nominally $20 a month)</li>
+                    <li>A registered domain for your product ($10-$50 for first year)</li>
+                </ul>
+                <a href="#" onclick="showPage('purchase')" class="btn btn-primary" style="width: 100%; margin-top: 2rem;">Ready? Get Started â†’</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMPARISON PAGE -->
+    <div id="comparison" class="page">
+        <div class="page-header">
+            <h1>SaaS Framework Comparison</h1>
+            <p>Natural language and low-code platforms for non-technical founders</p>
+        </div>
+        <div class="page-content">
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                These frameworks are designed for founders who want to build SaaS products without traditional coding. 
+                They can generate apps from natural language descriptions or provide low-code visual builders.
+            </p>
+            <div style="overflow-x: auto;">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Framework</th>
+                            <th>Tech Stack</th>
+                            <th>Google Cloud</th>
+                            <th>Azure</th>
+                            <th>AWS</th>
+                            <th>Generate from NL</th>
+                            <th>Auth</th>
+                            <th>User Mgmt</th>
+                            <th>Payments</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Lovable</strong></td>
+                            <td>React / Supabase</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="partial">â—‹</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bolt.new</strong></td>
+                            <td>Various (AI-generated)</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="partial">â—‹</td>
+                            <td class="partial">â—‹</td>
+                            <td class="partial">â—‹</td>
+                        </tr>
+                        <tr>
+                            <td><strong>v0.dev (Vercel)</strong></td>
+                            <td>React / Next.js</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="no">â€”</td>
+                            <td class="no">â€”</td>
+                            <td class="no">â€”</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Replit Agent</strong></td>
+                            <td>Various</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="partial">â—‹</td>
+                            <td class="partial">â—‹</td>
+                            <td class="partial">â—‹</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Marblism</strong></td>
+                            <td>Next.js / TypeScript</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bubble</strong></td>
+                            <td>Bubble (No-Code)</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="partial">â—‹</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                        </tr>
+                        <tr>
+                            <td><strong>FlutterFlow</strong></td>
+                            <td>Flutter / Dart</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="partial">â—‹</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                            <td class="check">âœ“</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="margin-top: 2rem; font-size: 0.9rem; color: var(--text-muted);">
+                <strong>Legend:</strong> âœ“ = Fully Supported | â—‹ = Partial/Limited | â€” = Not Included
+            </p>
+        </div>
+    </div>
+
+    <!-- VIBE STUDIO PAGE -->
+    <div id="vibe-studio" class="page">
+        <div class="page-header">
+            <h1>Vibe Studio</h1>
+            <p>AI produces the code. Vibe Studio deploys it as a revenue-producing SaaS product.</p>
+        </div>
+        <div class="page-content">
+            <div class="studio-feature">
+                <div>
+                    <h2 style="font-family: 'Syne', sans-serif; font-size: 2rem; margin-bottom: 1.5rem;">
+                        The Bridge Between AI and Production
+                    </h2>
+                    <p style="color: var(--text-secondary); font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem;">
+                        Vibe Studio is the missing piece that takes AI-generated code and transforms it into 
+                        a fully deployed, revenue-generating SaaS application. No DevOps knowledge required.
+                    </p>
+                    <ul style="list-style: none; color: var(--text-secondary);">
+                        <li style="padding: 0.75rem 0; display: flex; gap: 1rem; align-items: flex-start;">
+                            <span style="color: var(--accent); font-size: 1.25rem;">â†’</span>
+                            <span><strong style="color: var(--text-primary);">Automatic Deployment</strong> â€” Push to AWS with one click</span>
+                        </li>
+                        <li style="padding: 0.75rem 0; display: flex; gap: 1rem; align-items: flex-start;">
+                            <span style="color: var(--accent); font-size: 1.25rem;">â†’</span>
+                            <span><strong style="color: var(--text-primary);">Built-in Billing</strong> â€” Payment processing ready to go</span>
+                        </li>
+                        <li style="padding: 0.75rem 0; display: flex; gap: 1rem; align-items: flex-start;">
+                            <span style="color: var(--accent); font-size: 1.25rem;">â†’</span>
+                            <span><strong style="color: var(--text-primary);">User Management</strong> â€” Auth, roles, and permissions included</span>
+                        </li>
+                        <li style="padding: 0.75rem 0; display: flex; gap: 1rem; align-items: flex-start;">
+                            <span style="color: var(--accent); font-size: 1.25rem;">â†’</span>
+                            <span><strong style="color: var(--text-primary);">Scalable Infrastructure</strong> â€” Grows with your user base</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="studio-visual">
+                    <div class="flow-diagram">
+                        <div class="flow-step">
+                            <div class="icon">ðŸ“</div>
+                            <div class="text">
+                                <div class="label">Step 1</div>
+                                <div class="value">Write Your Spec in English</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">â†“</div>
+                        <div class="flow-step">
+                            <div class="icon">ðŸ¤–</div>
+                            <div class="text">
+                                <div class="label">Step 2</div>
+                                <div class="value">AI Generates React + Python Code</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">â†“</div>
+                        <div class="flow-step">
+                            <div class="icon">ðŸ”§</div>
+                            <div class="text">
+                                <div class="label">Step 3</div>
+                                <div class="value">Vibe Studio Builds & Configures</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">â†“</div>
+                        <div class="flow-step">
+                            <div class="icon">â˜ï¸</div>
+                            <div class="text">
+                                <div class="label">Step 4</div>
+                                <div class="value">Deploy to AWS</div>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">â†“</div>
+                        <div class="flow-step">
+                            <div class="icon">ðŸ’°</div>
+                            <div class="text">
+                                <div class="label">Step 5</div>
+                                <div class="value">Start Collecting Revenue</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EXAMPLES PAGE -->
+    <div id="examples" class="page">
+        <div class="page-header">
+            <h1>Example Product Specs</h1>
+            <p>See real product specifications that have been built with VibeForEveryone</p>
+        </div>
+        <div class="page-content">
+            <div class="placeholder-notice">
+                ðŸ“‹ Placeholder Content â€” Full examples coming soon
+            </div>
+            <h3 style="margin-bottom: 1.5rem;">Table of Contents</h3>
+            <ul class="toc-list">
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">01</span>
+                        <span class="title">SaaS Invoicing Platform Spec</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">02</span>
+                        <span class="title">Project Management Tool Spec</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">03</span>
+                        <span class="title">Customer Feedback System Spec</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">04</span>
+                        <span class="title">Appointment Booking App Spec</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">05</span>
+                        <span class="title">Subscription Box Manager Spec</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">06</span>
+                        <span class="title">Online Course Platform Spec</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- WHITE PAPERS PAGE -->
+    <div id="whitepapers" class="page">
+        <div class="page-header">
+            <h1>White Papers</h1>
+            <p>In-depth research and insights on vibe coding and SaaS development</p>
+        </div>
+        <div class="page-content">
+            <div id="wp-config-banner" class="config-banner">
+                &#9888; GitHub not yet configured &#8212; set GITHUB_USER and GITHUB_REPO at the top of the &lt;script&gt; block to load whitepapers dynamically.
+            </div>
+            <h3 style="margin-bottom: 1.5rem;">Table of Contents</h3>
+            <div id="wp-loading-toc" class="wp-loading">
+                <div class="wp-spinner"></div>
+                Loading whitepapers from GitHub...
+            </div>
+            <ul id="wp-toc" class="toc-list" style="display:none;"></ul>
+        </div>
+    </div>
+
+    <!-- WHITEPAPER READER PAGE (dynamically populated) -->
+    <div id="whitepaper-reader" class="page">
+        <div class="page-header">
+            <h1 id="wp-reader-title">White Paper</h1>
+            <p id="wp-reader-desc"></p>
+        </div>
+        <div class="page-content">
+            <a href="#" onclick="showPage('whitepapers'); return false;"
+               style="color:var(--accent);text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;margin-bottom:2rem;">
+                &#8592; Back to White Papers
+            </a>
+            <div id="wp-reader-body" class="wp-reader">
+                <div class="wp-loading"><div class="wp-spinner"></div>Loading...</div>
+            </div>
+        </div>
+    </div>
+    <!-- WHITEPAPER: AI AND MODELS USED -->
+    <div id="whitepaper-ai-models" class="page">
+        <div class="page-header">
+            <h1>AI and Models Used</h1>
+            <p>A practical guide to choosing the right Claude model for your vibe coding projects</p>
+        </div>
+        <div class="page-content">
+            <a href="#" onclick="showPage('whitepapers'); return false;" style="color: var(--accent); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem;">
+                â† Back to White Papers
+            </a>
+            
+            <article style="max-width: 800px;">
+                <section style="margin-bottom: 3rem;">
+                    <h2 style="font-family: 'Syne', sans-serif; font-size: 1.75rem; margin-bottom: 1rem; color: var(--text-primary);">Our Development Journey</h2>
+                    <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
+                        Most of VibeForEveryone was developed in late 2025 using the <strong style="color: var(--text-primary);">Claude Pro plan</strong> and <strong style="color: var(--accent);">Sonnet 4.5</strong>.
+                    </p>
+                    <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 1.5rem;">
+                        As the project got more complex, I switched to <strong style="color: var(--text-primary);">Claude Pro with Extra Usage</strong> and <strong style="color: var(--accent);">Opus 4.5</strong>.
+                    </p>
+                </section>
+
+                <section style="margin-bottom: 3rem;">
+                    <h2 style="font-family: 'Syne', sans-serif; font-size: 1.75rem; margin-bottom: 1rem; color: var(--text-primary);">Plan Comparison</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem;">
+                        <div style="background: var(--dark-card); border-radius: 16px; padding: 2rem; border: 1px solid rgba(99, 102, 241, 0.2);">
+                            <div style="font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Starter Option</div>
+                            <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Claude Pro</h3>
+                            <div style="font-family: 'Space Mono', monospace; font-size: 2rem; font-weight: 700; color: var(--accent-warm); margin-bottom: 1rem;">$20<span style="font-size: 1rem; color: var(--text-muted);">/month</span></div>
+                            <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
+                                Great for getting started. Sometimes turns off for a few hours when you make heavy queries, but excellent value for most vibe coding work.
+                            </p>
+                        </div>
+                        <div style="background: var(--dark-card); border-radius: 16px; padding: 2rem; border: 2px solid var(--primary);">
+                            <div style="font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Power User</div>
+                            <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Claude Pro with Extra Usage turned On (Pay As you Go)</h3>
+                            <div style="font-family: 'Space Mono', monospace; font-size: 2rem; font-weight: 700; color: var(--accent-warm); margin-bottom: 1rem;">$20+<span style="font-size: 1rem; color: var(--text-muted);">/month</span></div>
+                            <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
+                                Handles the higher demands of Opus 4.5 (or the latest Model) by extending with incremental purchases $5+ when limits are hit.
+                            </p>
+                        </div>
+           
+                        <div style="background: var(--dark-card); border-radius: 16px; padding: 2rem; border: 2px solid var(--primary);">
+                            <div style="font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Power User</div>
+                            <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Claude Max</h3>
+                            <div style="font-family: 'Space Mono', monospace; font-size: 2rem; font-weight: 700; color: var(--accent-warm); margin-bottom: 1rem;">$100<span style="font-size: 1rem; color: var(--text-muted);">/month</span></div>
+                            <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
+                                Handles the higher demands of Opus 4.5 (or the latest Model). No interruptions during intensive development sessions. Worth it for complex projects.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section style="margin-bottom: 3rem;">
+                    <h2 style="font-family: 'Syne', sans-serif; font-size: 1.75rem; margin-bottom: 1.5rem; color: var(--text-primary);">Model Comparison</h2>
+                    
+                    <div style="background: var(--dark-card); border-radius: 16px; padding: 2rem; border-left: 4px solid #22c55e; margin-bottom: 1.5rem;">
+                        <h3 style="font-size: 1.25rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem;">
+                            <span style="background: linear-gradient(135deg, #22c55e, #16a34a); padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600;">RECOMMENDED</span>
+                            Claude Sonnet 4.5
+                        </h3>
+                        <p style="color: var(--text-secondary); line-height: 1.8;">
+                            Offers an excellent balance of intelligence and efficiency for coding. It handles complex programming tasks well, including debugging, code generation, refactoring, and explaining code across many languages. It's designed for everyday use including substantial coding work.
+                        </p>
+                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05);">
+                            <strong style="color: var(--text-primary);">Best for:</strong>
+                            <span style="color: var(--text-secondary);"> Building features, debugging issues, learning new concepts â€” the sweet spot for most programming work.</span>
+                        </div>
+                    </div>
+
+                    <div style="background: var(--dark-card); border-radius: 16px; padding: 2rem; border-left: 4px solid var(--primary); margin-bottom: 1.5rem;">
+                        <h3 style="font-size: 1.25rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem;">
+                            <span style="background: var(--gradient-hero); padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600;">MOST POWERFUL</span>
+                            Claude Opus 4.5
+                        </h3>
+                        <p style="color: var(--text-secondary); line-height: 1.8;">
+                            The most capable model in the family, best for the most complex programming challenges â€” like architectural design for large systems, very intricate algorithms, or when you need the absolute highest level of reasoning. However, it's also slower and more expensive.
+                        </p>
+                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05);">
+                            <strong style="color: var(--text-primary);">Best for:</strong>
+                            <span style="color: var(--text-secondary);"> Complex architectural decisions, intricate algorithms, highest-stakes reasoning tasks.</span>
+                        </div>
+                    </div>
+
+                    <div style="background: var(--dark-card); border-radius: 16px; padding: 2rem; border-left: 4px solid var(--accent); margin-bottom: 1.5rem;">
+                        <h3 style="font-size: 1.25rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem;">
+                            <span style="background: linear-gradient(135deg, #22d3ee, #0891b2); padding: 0.25rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600;">FASTEST</span>
+                            Claude Haiku 4.5
+                        </h3>
+                        <p style="color: var(--text-secondary); line-height: 1.8;">
+                            The fastest and most cost-effective option, good for simpler coding tasks, quick code reviews, or when you need rapid responses. It's less suitable for complex problem-solving.
+                        </p>
+                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05);">
+                            <strong style="color: var(--text-primary);">Best for:</strong>
+                            <span style="color: var(--text-secondary);"> Quick tasks, simple code reviews, rapid iteration on small changes.</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section style="margin-bottom: 3rem;">
+                    <h2 style="font-family: 'Syne', sans-serif; font-size: 1.75rem; margin-bottom: 1rem; color: var(--text-primary);">Quick Reference</h2>
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; background: var(--dark-card); border-radius: 12px; overflow: hidden;">
+                            <thead>
+                                <tr style="background: rgba(99, 102, 241, 0.2);">
+                                    <th style="padding: 1rem; text-align: left; font-family: 'Space Mono', monospace; font-size: 0.8rem; text-transform: uppercase;">Model</th>
+                                    <th style="padding: 1rem; text-align: left; font-family: 'Space Mono', monospace; font-size: 0.8rem; text-transform: uppercase;">Speed</th>
+                                    <th style="padding: 1rem; text-align: left; font-family: 'Space Mono', monospace; font-size: 0.8rem; text-transform: uppercase;">Capability</th>
+                                    <th style="padding: 1rem; text-align: left; font-family: 'Space Mono', monospace; font-size: 0.8rem; text-transform: uppercase;">Cost</th>
+                                    <th style="padding: 1rem; text-align: left; font-family: 'Space Mono', monospace; font-size: 0.8rem; text-transform: uppercase;">Use Case</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <td style="padding: 1rem; font-weight: 600;">Haiku 4.5</td>
+                                    <td style="padding: 1rem; color: #22c55e;">âš¡ Fastest</td>
+                                    <td style="padding: 1rem; color: var(--text-muted);">Good</td>
+                                    <td style="padding: 1rem; color: #22c55e;">$</td>
+                                    <td style="padding: 1rem; color: var(--text-secondary);">Quick tasks</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(99, 102, 241, 0.05);">
+                                    <td style="padding: 1rem; font-weight: 600;">Sonnet 4.5</td>
+                                    <td style="padding: 1rem; color: var(--accent);">Fast</td>
+                                    <td style="padding: 1rem; color: #22c55e;">Excellent</td>
+                                    <td style="padding: 1rem; color: var(--accent);">$$</td>
+                                    <td style="padding: 1rem; color: var(--text-secondary);">Daily coding</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 1rem; font-weight: 600;">Opus 4.5</td>
+                                    <td style="padding: 1rem; color: var(--text-muted);">Slower</td>
+                                    <td style="padding: 1rem; color: var(--primary);">Best</td>
+                                    <td style="padding: 1rem; color: var(--accent-warm);">$$$</td>
+                                    <td style="padding: 1rem; color: var(--text-secondary);">Complex architecture</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1)); border-radius: 16px; padding: 2rem; border: 1px solid rgba(99, 102, 241, 0.2);">
+                    <h2 style="font-family: 'Syne', sans-serif; font-size: 1.5rem; margin-bottom: 1rem; color: var(--text-primary);">ðŸ’¡ Pro Tip: Claude Code</h2>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        If you're using the API, you might also want to check out <strong style="color: var(--text-primary);">Claude Code</strong> â€” a command line tool specifically designed for agentic coding tasks that lets you delegate coding work directly from your terminal.
+                    </p>
+                    <a href="https://docs.anthropic.com" target="_blank" style="display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1rem; color: var(--accent); text-decoration: none; font-weight: 600;">
+                        Learn more about Claude Code â†’
+                    </a>
+                </section>
+            </article>
+        </div>
+    </div>
+
+    <!-- HOW TO VIBE CODE PAGE -->
+    <div id="how-to-vibe" class="page">
+        <div class="page-header">
+            <h1>How to Vibe Code</h1>
+            <p>Master the art of building software with natural language</p>
+        </div>
+        <div class="page-content">
+            <div class="placeholder-notice">
+                ðŸŽ¯ Content coming soon â€” Check back for our complete guide
+            </div>
+            <h3 style="margin-bottom: 1.5rem;">What You'll Learn</h3>
+            <ul class="toc-list">
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">01</span>
+                        <span class="title">Introduction to Vibe Coding</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">02</span>
+                        <span class="title">Writing Effective Product Specifications</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">03</span>
+                        <span class="title">Communicating with AI: Prompt Engineering Basics</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">04</span>
+                        <span class="title">Iterating on Your Product</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">05</span>
+                        <span class="title">Testing and Quality Assurance</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">06</span>
+                        <span class="title">Deployment and Launch Checklist</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- REVENUE GUIDE PAGE -->
+    <div id="revenue" class="page">
+        <div class="page-header">
+            <h1>Generate Revenue as an Owner-Operator</h1>
+            <p>Turn your SaaS product into a profitable business</p>
+        </div>
+        <div class="page-content">
+            <div class="placeholder-notice">
+                ðŸ’° Content coming soon â€” Comprehensive revenue strategies ahead
+            </div>
+            <h3 style="margin-bottom: 1.5rem;">Revenue Generation Topics</h3>
+            <ul class="toc-list">
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">01</span>
+                        <span class="title">Pricing Strategies for SaaS Products</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">02</span>
+                        <span class="title">Setting Up Subscription Billing</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">03</span>
+                        <span class="title">Customer Acquisition on a Bootstrap Budget</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">04</span>
+                        <span class="title">Reducing Churn and Increasing Lifetime Value</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">05</span>
+                        <span class="title">Scaling from Side Project to Full-Time Business</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- TRAINING PAGE -->
+    <div id="training" class="page">
+        <div class="page-header">
+            <h1>Training Courses</h1>
+            <p>Learn to build and deploy SaaS products with expert-led courses</p>
+        </div>
+        <div class="page-content">
+            <div class="placeholder-notice">
+                ðŸ“š Available Late March 2025
+            </div>
+            <div class="training-grid">
+                <div class="training-card featured">
+                    <div class="training-badge">Free Through April!</div>
+                    <h3 class="training-title">Vibe Coding with Claude 101</h3>
+                    <p class="training-desc">
+                        Get started with vibe coding using Claude AI. Learn how to write effective prompts, 
+                        generate quality code, and iterate on your product specifications.
+                    </p>
+                    <div class="training-meta">
+                        <span class="training-price free">FREE</span>
+                        <span class="training-date">Available Late March</span>
+                    </div>
+                </div>
+                <div class="training-card">
+                    <h3 class="training-title">The VibeForEveryone Framework Architectural Overview</h3>
+                    <p class="training-desc">
+                        Deep dive into the VibeForEveryone framework architecture. Understand how React 
+                        and Python components work together to power your SaaS applications.
+                    </p>
+                    <div class="training-meta">
+                        <span class="training-price">Coming Soon</span>
+                        <span class="training-date">Available Late March</span>
+                    </div>
+                </div>
+                <div class="training-card">
+                    <h3 class="training-title">AWS Essentials for SaaS Founders</h3>
+                    <p class="training-desc">
+                        Everything you need to know about AWS for deploying your SaaS product. 
+                        Covers free tier usage, scaling, monitoring, and cost optimization.
+                    </p>
+                    <div class="training-meta">
+                        <span class="training-price">Coming Soon</span>
+                        <span class="training-date">Available Late March</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PARTNERS PAGE -->
+    <div id="partners" class="page">
+        <div class="page-header">
+            <h1>Partner Applications</h1>
+            <p>Applications built with VibeForEveryone</p>
+        </div>
+        <div class="page-content">
+            <div class="placeholder-notice">
+                ðŸ¤ Partner showcase coming soon â€” Join our growing community
+            </div>
+            <h3 style="margin-bottom: 1.5rem;">Featured Partner Applications</h3>
+            <div class="partner-grid">
+                <div class="partner-card">
+                    <h3>Partner Application #1</h3>
+                    <p>Description of the partner application and its use case.</p>
+                    <span class="tag">Coming Soon</span>
+                </div>
+                <div class="partner-card">
+                    <h3>Partner Application #2</h3>
+                    <p>Description of the partner application and its use case.</p>
+                    <span class="tag">Coming Soon</span>
+                </div>
+                <div class="partner-card">
+                    <h3>Partner Application #3</h3>
+                    <p>Description of the partner application and its use case.</p>
+                    <span class="tag">Coming Soon</span>
+                </div>
+                <div class="partner-card">
+                    <h3>Partner Application #4</h3>
+                    <p>Description of the partner application and its use case.</p>
+                    <span class="tag">Coming Soon</span>
+                </div>
+            </div>
+            <div style="margin-top: 3rem; text-align: center;">
+                <h3 style="margin-bottom: 1rem;">Built something with VibeForEveryone?</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    We'd love to feature your application. Get in touch to be added to our partner showcase.
+                </p>
+                <a href="#" onclick="showPage('contact')" class="btn btn-primary">Submit Your Application</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONSULTING PAGE -->
+    <div id="consulting" class="page">
+        <div class="page-header">
+            <h1>Consulting Services</h1>
+            <p>Let our experts build your SaaS product with rapid turnaround</p>
+        </div>
+        <div class="page-content">
+            <div style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%); border: 2px solid var(--accent-warm); border-radius: 16px; padding: 2rem; margin-bottom: 3rem; text-align: center;">
+                <h2 style="color: var(--accent-warm); margin-bottom: 0.5rem;">ðŸ”¥ Current Specials</h2>
+                <p style="font-size: 1.2rem;">Limited time offer â€” Contact us for details</p>
+            </div>
+            
+            <h3 style="margin-bottom: 1.5rem;">What We Offer</h3>
+            <div class="options-grid">
+                <div class="option-card">
+                    <h3 class="option-title">Rapid Build Package</h3>
+                    <p class="option-desc">From concept to deployed SaaS in under 2 weeks</p>
+                    <ul class="option-features">
+                        <li>Discovery and specification session</li>
+                        <li>AI-assisted architecture design</li>
+                        <li>Full development and testing</li>
+                        <li>AWS deployment and configuration</li>
+                        <li>Payment processor integration</li>
+                        <li>Documentation and handoff</li>
+                    </ul>
+                    <a href="#" onclick="showPage('contact')" class="btn btn-primary" style="margin-top: 2rem;">Get a Quote</a>
+                </div>
+                <div class="option-card">
+                    <h3 class="option-title">Ongoing Support</h3>
+                    <p class="option-desc">Continued assistance after launch</p>
+                    <ul class="option-features">
+                        <li>Bug fixes and maintenance</li>
+                        <li>Feature additions and iterations</li>
+                        <li>Performance optimization</li>
+                        <li>Scaling guidance</li>
+                        <li>Priority support access</li>
+                    </ul>
+                    <a href="#" onclick="showPage('contact')" class="btn btn-secondary" style="margin-top: 2rem;">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HELP PAGE -->
+    <div id="help" class="page">
+        <div class="page-header">
+            <h1>Vibe Studio Help</h1>
+            <p>Documentation and guides for using Vibe Studio</p>
+        </div>
+        <div class="page-content">
+            <div class="placeholder-notice">
+                ðŸ“– Help documentation in development
+            </div>
+            <h3 style="margin-bottom: 1.5rem;">Help Topics</h3>
+            <ul class="toc-list">
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">01</span>
+                        <span class="title">Getting Started with Vibe Studio</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">02</span>
+                        <span class="title">Creating Your First Project</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">03</span>
+                        <span class="title">Connecting to AWS</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">04</span>
+                        <span class="title">Deploying Your Application</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">05</span>
+                        <span class="title">Setting Up Payment Processing</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">06</span>
+                        <span class="title">Managing Users and Permissions</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">07</span>
+                        <span class="title">Troubleshooting Common Issues</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+                <li class="toc-item">
+                    <a href="#">
+                        <span class="number">08</span>
+                        <span class="title">FAQ</span>
+                        <span class="arrow">â†’</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- CONTACT PAGE -->
+    <div id="contact" class="page">
+        <div class="page-header">
+            <h1>Contact Us</h1>
+            <p>Get in touch with our team</p>
+        </div>
+        <div class="page-content">
+            <div class="contact-form">
+                <form>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <select id="subject" name="subject">
+                            <option value="">Select a topic...</option>
+                            <option value="sales">Licensing & Purchase</option>
+                            <option value="consulting">Consulting Inquiry</option>
+                            <option value="support">Technical Support</option>
+                            <option value="partnership">Partnership Opportunity</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Tell us about your project or question..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMPANY PERSONNEL PAGE -->
+    <div id="personnel" class="page">
+        <div class="page-header">
+            <h1>Our Team</h1>
+            <p>The people behind VibeForEveryone</p>
+        </div>
+        <div class="page-content">
+            <div class="placeholder-notice">
+                ðŸ‘¥ Team profiles coming soon
+            </div>
+            <div class="personnel-grid">
+                <div class="person-card">
+                    <div class="person-avatar">?</div>
+                    <div class="person-name">Team Member</div>
+                    <div class="person-role">Founder & CEO</div>
+                    <p class="person-bio">Bio coming soon...</p>
+                </div>
+                <div class="person-card">
+                    <div class="person-avatar">?</div>
+                    <div class="person-name">Team Member</div>
+                    <div class="person-role">CTO</div>
+                    <p class="person-bio">Bio coming soon...</p>
+                </div>
+                <div class="person-card">
+                    <div class="person-avatar">?</div>
+                    <div class="person-name">Team Member</div>
+                    <div class="person-role">Lead Developer</div>
+                    <p class="person-bio">Bio coming soon...</p>
+                </div>
+                <div class="person-card">
+                    <div class="person-avatar">?</div>
+                    <div class="person-name">Team Member</div>
+                    <div class="person-role">Customer Success</div>
+                    <p class="person-bio">Bio coming soon...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">VibeForEveryone</div>
+                <p>From English to a working, billable SaaS product. Built for non-technical founders.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Product</h4>
+                <a href="#" onclick="showPage('purchase')">Purchase</a>
+                <a href="#" onclick="showPage('comparison')">Compare</a>
+                <a href="#" onclick="showPage('vibe-studio')">Vibe Studio</a>
+                <a href="#" onclick="showPage('training')">Training</a>
+            </div>
+            <div class="footer-col">
+                <h4>Resources</h4>
+                <a href="#" onclick="showPage('how-to-vibe')">How to Vibe Code</a>
+                <a href="#" onclick="showPage('examples')">Examples</a>
+                <a href="#" onclick="showPage('whitepapers')">White Papers</a>
+                <a href="#" onclick="showPage('help')">Help Center</a>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <a href="#" onclick="showPage('partners')">Partners</a>
+                <a href="#" onclick="showPage('consulting')">Consulting</a>
+                <a href="#" onclick="showPage('personnel')">Team</a>
+                <a href="#" onclick="showPage('contact')">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Â© 2025 VibeForEveryone. All rights reserved.</p>
+            <p>vibeforeveryone.com</p>
+        </div>
+    </footer>
+
+    <script>
+        // ─────────────────────────────────────────────────────────────
+        //  WHITEPAPER SYSTEM
+        // ─────────────────────────────────────────────────────────────
+
+        // Check if GitHub is configured
+        const githubConfigured = GITHUB_USER !== 'YOUR_GITHUB_USERNAME';
+
+        // Build the whitepapers TOC from manifest.json on GitHub
+        async function loadWhitepaperTOC() {
+            const tocEl      = document.getElementById('wp-toc');
+            const loadingEl  = document.getElementById('wp-loading-toc');
+            const bannerEl   = document.getElementById('wp-config-banner');
+
+            if (!githubConfigured) {
+                bannerEl.classList.add('visible');
+                loadingEl.style.display = 'none';
+                // Fall back to rendering a minimal built-in entry
+                renderFallbackTOC(tocEl);
+                return;
+            }
+
+            try {
+                const res = await fetch(MANIFEST_URL);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+                renderTOC(tocEl, data.whitepapers);
+            } catch (err) {
+                loadingEl.innerHTML = `<div class="wp-error">&#9888; Could not load whitepaper list from GitHub.<br><small>${err.message}</small></div>`;
+                return;
+            }
+
+            loadingEl.style.display = 'none';
+            tocEl.style.display = '';
+        }
+
+        function renderTOC(tocEl, papers) {
+            tocEl.innerHTML = papers.map(paper => `
+                <li class="toc-item">
+                    <a href="#" onclick="openWhitepaper(${JSON.stringify(paper)}); return false;">
+                        <span class="number">${paper.number}</span>
+                        <span class="title">${paper.title}</span>
+                        <span class="arrow">&#8594;</span>
+                    </a>
+                </li>`).join('');
+        }
+
+        function renderFallbackTOC(tocEl) {
+            // Show only the hardcoded AI models paper when GitHub isn't configured
+            tocEl.innerHTML = `
+                <li class="toc-item">
+                    <a href="#" onclick="showPage('whitepaper-ai-models'); return false;">
+                        <span class="number">01</span>
+                        <span class="title">AI and Models Used</span>
+                        <span class="arrow">&#8594;</span>
+                    </a>
+                </li>`;
+            tocEl.style.display = '';
+        }
+
+        // Open a whitepaper — routes to internal page or fetches from GitHub
+        function openWhitepaper(paper) {
+            if (paper.type === 'internal') {
+                showPage(paper.target);
+                return;
+            }
+            // GitHub-hosted .md file
+            loadGithubWhitepaper(paper);
+            showPage('whitepaper-reader');
+        }
+
+        async function loadGithubWhitepaper(paper) {
+            document.getElementById('wp-reader-title').textContent = paper.title;
+            document.getElementById('wp-reader-desc').textContent  = paper.description || '';
+            const body = document.getElementById('wp-reader-body');
+            body.innerHTML = '<div class="wp-loading"><div class="wp-spinner"></div>Loading...</div>';
+
+            try {
+                const url = GITHUB_RAW_BASE + paper.file;
+                const res = await fetch(url);
+                if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${url}`);
+                const md  = await res.text();
+                body.innerHTML = marked.parse(md);
+            } catch (err) {
+                body.innerHTML = `<div class="wp-error">&#9888; Could not load whitepaper.<br><small>${err.message}</small><br><br>
+                    Make sure the file exists in your GitHub repo and GITHUB_USER / GITHUB_REPO are set correctly.</div>`;
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        //  PAGE NAVIGATION
+        // ─────────────────────────────────────────────────────────────
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            document.getElementById(pageId).classList.add('active');
+
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(pageId)) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Load whitepaper TOC when visiting that page
+            if (pageId === 'whitepapers') {
+                loadWhitepaperTOC();
+            }
+
+            document.querySelector('.nav-links').classList.remove('active');
+            window.scrollTo(0, 0);
+        }
+
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+            this.textContent = this.textContent === '☰' ? '✕' : '☰';
+        });
+
+        document.addEventListener('click', function(event) {
+            const navLinks   = document.querySelector('.nav-links');
+            const menuToggle = document.querySelector('.mobile-menu-toggle');
+            if (!navLinks.contains(event.target) && !menuToggle.contains(event.target)) {
+                navLinks.classList.remove('active');
+                menuToggle.textContent = '☰';
+            }
+        });
+    </script>
+</body>
+</html>
