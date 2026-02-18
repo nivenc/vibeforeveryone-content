@@ -1,0 +1,22 @@
+{
+  "whitepapers": [
+    {
+      "id": "wp-001",
+      "number": "01",
+      "title": "AI and Models Used",
+      "description": "A practical guide to choosing the right Claude model for your vibe coding projects",
+      "type": "internal",
+      "target": "whitepaper-ai-models",
+      "date": "2025-12"
+    },
+    {
+      "id": "wp-002",
+      "number": "02",
+      "title": "Email Plus Addressing: Track Who's Sharing Your Email",
+      "description": "How to use the built-in email standard that lets you identify which companies sell your address",
+      "type": "github",
+      "file": "email-plus-addressing-track-usage.md",
+      "date": "2026-02"
+    }
+  ]
+}
