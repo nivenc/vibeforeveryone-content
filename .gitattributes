@@ -1,2 +1,4 @@
 # Auto detect text files and perform LF normalization
-* text=auto
+* text=auto encoding=utf-8
+*.html text encoding=utf-8
+*.css  text encoding=utf-8
