@@ -17,6 +17,15 @@
       "type": "github",
       "file": "email-plus-addressing-track-usage.md",
       "date": "2026-02"
+    },
+    {
+      "id": "wp-003",
+      "number": "03",
+      "title": "installing python 3.13 on windows",
+      "description": "installing python 3.13 on windows",
+      "type": "github",
+      "file": "installing_python_3.13_windows.md",
+      "date": "2026-02"
     }
   ]
 }

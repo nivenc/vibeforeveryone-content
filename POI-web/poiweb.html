@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PointsOfInterest — Discover America's Hidden Gems</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --deep-blue: #0f2140;
+    --ocean: #1a3a5c;
+    --teal: #2dd4bf;
+    --teal-glow: #2dd4bf44;
+    --amber: #f59e0b;
+    --amber-glow: #f59e0b33;
+    --sand: #fef3c7;
+    --cream: #fdfaf1;
+    --slate: #94a3b8;
+    --white: #f8fafc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 4%;
+    backdrop-filter: blur(20px);
+    background: rgba(10, 22, 40, 0.7);
+    border-bottom: 1px solid rgba(45, 212, 191, 0.08);
+    transition: background 0.3s;
+  }
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--teal), var(--amber));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    box-shadow: 0 0 20px var(--teal-glow);
+  }
+  .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+  .nav-links a {
+    color: var(--slate);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.3s;
+    letter-spacing: 0.03em;
+  }
+  .nav-links a:hover { color: var(--teal); }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--teal), #14b8a6) !important;
+    color: var(--navy) !important;
+    padding: 0.6rem 1.4rem;
+    border-radius: 8px;
+    font-weight: 600 !important;
+    transition: transform 0.2s, box-shadow 0.3s !important;
+    box-shadow: 0 0 20px var(--teal-glow);
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 30px var(--teal-glow); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 8rem 4% 4rem;
+    overflow: hidden;
+  }
+
+  /* Animated grid background */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(45, 212, 191, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(45, 212, 191, 0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridPulse 8s ease-in-out infinite;
+  }
+  @keyframes gridPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  /* Glowing orbs */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    animation: float 12s ease-in-out infinite;
+  }
+  .orb-1 { width: 500px; height: 500px; background: var(--teal); top: -10%; right: -5%; animation-delay: 0s; }
+  .orb-2 { width: 400px; height: 400px; background: var(--amber); bottom: -10%; left: -5%; animation-delay: -4s; opacity: 0.25; }
+  .orb-3 { width: 300px; height: 300px; background: #6366f1; top: 40%; left: 30%; animation-delay: -8s; opacity: 0.15; }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -20px) scale(1.05); }
+    66% { transform: translate(-20px, 15px) scale(0.95); }
+  }
+
+  .hero-content {
+    text-align: center;
+    max-width: 900px;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(45, 212, 191, 0.1);
+    border: 1px solid rgba(45, 212, 191, 0.2);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--teal);
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease-out both;
+  }
+  .badge-dot {
+    width: 8px; height: 8px;
+    background: var(--teal);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s ease-out 0.15s both;
+  }
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--teal), var(--amber));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    font-size: 1.2rem;
+    color: var(--slate);
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+    font-weight: 300;
+    animation: fadeUp 0.8s ease-out 0.3s both;
+  }
+  .hero-buttons {
+    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 0.8s ease-out 0.45s both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--teal), #14b8a6);
+    color: var(--navy);
+    padding: 1rem 2.2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.3s;
+    box-shadow: 0 0 30px var(--teal-glow);
+    border: none; cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px var(--teal-glow); }
+  .btn-secondary {
+    background: rgba(255,255,255,0.05);
+    color: var(--white);
+    padding: 1rem 2.2rem;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    border: 1px solid rgba(255,255,255,0.12);
+    transition: background 0.3s, border-color 0.3s;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.25); }
+
+  /* ── MAP PREVIEW ── */
+  .map-preview {
+    max-width: 1100px;
+    margin: -2rem auto 0;
+    padding: 0 4%;
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 1s ease-out 0.6s both;
+  }
+  .map-frame {
+    background: var(--deep-blue);
+    border-radius: 20px;
+    border: 1px solid rgba(45, 212, 191, 0.12);
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(45, 212, 191, 0.05),
+      0 25px 80px -20px rgba(0,0,0,0.6),
+      0 0 60px var(--teal-glow);
+    position: relative;
+  }
+  .map-toolbar {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 1rem 1.4rem;
+    background: rgba(15, 33, 64, 0.8);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .toolbar-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+  }
+  .toolbar-dot:nth-child(1) { background: #ef4444; }
+  .toolbar-dot:nth-child(2) { background: #f59e0b; }
+  .toolbar-dot:nth-child(3) { background: #22c55e; }
+  .toolbar-url {
+    flex: 1;
+    margin-left: 0.8rem;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 0.45rem 1rem;
+    font-size: 0.8rem;
+    color: var(--slate);
+  }
+
+  .map-body {
+    padding: 2.5rem;
+    min-height: 420px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 50% 50%, rgba(45, 212, 191, 0.03) 0%, transparent 70%);
+  }
+
+  /* SVG US Map */
+  .us-map-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  .us-map-container svg {
+    width: 100%;
+    max-width: 750px;
+  }
+
+  /* Animated pins */
+  .pin-group { cursor: pointer; }
+  .pin-ring {
+    animation: pingRing 3s ease-out infinite;
+  }
+  @keyframes pingRing {
+    0% { r: 4; opacity: 0.6; }
+    100% { r: 18; opacity: 0; }
+  }
+  .pin-group:nth-child(2) .pin-ring { animation-delay: 0.5s; }
+  .pin-group:nth-child(3) .pin-ring { animation-delay: 1s; }
+  .pin-group:nth-child(4) .pin-ring { animation-delay: 1.5s; }
+  .pin-group:nth-child(5) .pin-ring { animation-delay: 2s; }
+
+  .pin-tooltip {
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .pin-group:hover .pin-tooltip { opacity: 1; }
+
+  /* ── FEATURES ── */
+  .features {
+    padding: 8rem 4%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .section-label {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--teal);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .section-label::before {
+    content: '';
+    width: 24px; height: 2px;
+    background: var(--teal);
+    border-radius: 2px;
+  }
+  .features h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+  .features > p {
+    color: var(--slate);
+    font-size: 1.1rem;
+    max-width: 550px;
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 4rem;
+  }
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .feature-card {
+    background: linear-gradient(145deg, rgba(15, 33, 64, 0.6), rgba(10, 22, 40, 0.8));
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px;
+    padding: 2.2rem;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--teal), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .feature-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(45, 212, 191, 0.15);
+    box-shadow: 0 20px 60px -15px rgba(0,0,0,0.4);
+  }
+  .feature-card:hover::before { opacity: 1; }
+  .feature-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.4rem;
+  }
+  .fi-1 { background: rgba(45, 212, 191, 0.12); }
+  .fi-2 { background: rgba(245, 158, 11, 0.12); }
+  .fi-3 { background: rgba(99, 102, 241, 0.12); }
+  .fi-4 { background: rgba(239, 68, 68, 0.12); }
+  .fi-5 { background: rgba(34, 197, 94, 0.12); }
+  .fi-6 { background: rgba(168, 85, 247, 0.12); }
+  .feature-card h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+  .feature-card p {
+    color: var(--slate);
+    font-size: 0.92rem;
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  /* ── STATS ── */
+  .stats {
+    padding: 4rem 4%;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    background: linear-gradient(145deg, rgba(15, 33, 64, 0.5), rgba(10, 22, 40, 0.6));
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 24px;
+    padding: 3rem;
+  }
+  .stat { text-align: center; }
+  .stat-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.8rem;
+    background: linear-gradient(135deg, var(--teal), var(--amber));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+  }
+  .stat-label {
+    color: var(--slate);
+    font-size: 0.88rem;
+    font-weight: 400;
+    margin-top: 0.3rem;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how-it-works {
+    padding: 8rem 4%;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .how-it-works h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    letter-spacing: -0.02em;
+    margin-bottom: 4rem;
+    text-align: center;
+  }
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+  .steps::before {
+    content: '';
+    position: absolute;
+    left: 32px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--teal), var(--amber), #6366f1);
+    opacity: 0.3;
+  }
+  .step {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    padding: 2rem 0;
+  }
+  .step-num {
+    width: 64px; height: 64px;
+    min-width: 64px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    position: relative;
+    z-index: 2;
+  }
+  .step:nth-child(1) .step-num { background: linear-gradient(135deg, rgba(45,212,191,0.2), rgba(45,212,191,0.05)); border: 1px solid rgba(45,212,191,0.3); color: var(--teal); }
+  .step:nth-child(2) .step-num { background: linear-gradient(135deg, rgba(245,158,11,0.2), rgba(245,158,11,0.05)); border: 1px solid rgba(245,158,11,0.3); color: var(--amber); }
+  .step:nth-child(3) .step-num { background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(99,102,241,0.05)); border: 1px solid rgba(99,102,241,0.3); color: #818cf8; }
+  .step h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  .step p {
+    color: var(--slate);
+    line-height: 1.7;
+    font-weight: 300;
+    font-size: 1rem;
+  }
+
+  /* ── CTA ── */
+  .cta-section {
+    padding: 8rem 4%;
+    text-align: center;
+    position: relative;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, var(--teal-glow), transparent 70%);
+    filter: blur(60px);
+    pointer-events: none;
+  }
+  .cta-box {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .cta-section h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+  .cta-section p {
+    color: var(--slate);
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 3rem 4%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  footer .logo { font-size: 1.2rem; }
+  footer p { color: var(--slate); font-size: 0.85rem; }
+  .footer-links { display: flex; gap: 2rem; }
+  .footer-links a {
+    color: var(--slate);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--teal); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+    .map-body { padding: 1.2rem; min-height: 260px; }
+    .feature-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); padding: 2rem; }
+    .steps::before { left: 24px; }
+    .step-num { width: 48px; height: 48px; min-width: 48px; font-size: 1.1rem; }
+    .step { gap: 1.2rem; }
+    footer { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <div class="logo-icon">📍</div>
+    PointsOfInterest
+  </div>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how-it-works">How It Works</a>
+    <a href="#download" class="nav-cta">Get Started</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="badge-dot"></span> Explore 50 states, thousands of places</div>
+    <h1>Discover <span>America's</span><br>Hidden Gems</h1>
+    <p>An interactive US map that uncovers the most fascinating places of interest — from national landmarks to local treasures you never knew existed.</p>
+    <div class="hero-buttons">
+      <a href="#download" class="btn-primary">Start Exploring →</a>
+      <a href="#features" class="btn-secondary">See Features</a>
+    </div>
+  </div>
+</section>
+
+<!-- MAP PREVIEW -->
+<div class="map-preview">
+  <div class="map-frame">
+    <div class="map-toolbar">
+      <div class="toolbar-dot"></div>
+      <div class="toolbar-dot"></div>
+      <div class="toolbar-dot"></div>
+      <div class="toolbar-url">pointsofinterest.app</div>
+    </div>
+    <div class="map-body">
+      <div class="us-map-container">
+        <svg viewBox="0 0 960 600" xmlns="http://www.w3.org/2000/svg">
+          <!-- Simplified US outline -->
+          <path d="M 200 130 L 210 125 L 280 120 L 350 118 L 420 115 L 500 112 L 570 115 L 610 120 L 650 130 L 680 145 L 700 160 L 720 175 L 740 195 L 750 220 L 755 250 L 752 275 L 745 300 L 735 330 L 730 345 L 720 355 L 710 370 L 695 385 L 680 395 L 660 400 L 640 410 L 620 415 L 590 420 L 565 430 L 540 440 L 510 445 L 480 448 L 450 445 L 420 440 L 390 435 L 360 425 L 330 415 L 300 410 L 270 415 L 240 420 L 220 430 L 200 440 L 180 445 L 155 440 L 135 430 L 120 415 L 108 395 L 100 375 L 95 350 L 92 320 L 90 290 L 92 260 L 98 230 L 108 200 L 120 175 L 140 155 L 165 140 L 200 130 Z"
+                fill="rgba(45, 212, 191, 0.06)"
+                stroke="rgba(45, 212, 191, 0.25)"
+                stroke-width="1.5"/>
+
+          <!-- State grid lines (artistic) -->
+          <line x1="400" y1="112" x2="400" y2="448" stroke="rgba(45, 212, 191, 0.06)" stroke-width="0.5"/>
+          <line x1="300" y1="130" x2="300" y2="415" stroke="rgba(45, 212, 191, 0.06)" stroke-width="0.5"/>
+          <line x1="500" y1="112" x2="500" y2="448" stroke="rgba(45, 212, 191, 0.06)" stroke-width="0.5"/>
+          <line x1="600" y1="118" x2="600" y2="420" stroke="rgba(45, 212, 191, 0.06)" stroke-width="0.5"/>
+          <line x1="90" y1="250" x2="755" y2="250" stroke="rgba(45, 212, 191, 0.06)" stroke-width="0.5"/>
+          <line x1="92" y1="350" x2="745" y2="350" stroke="rgba(45, 212, 191, 0.06)" stroke-width="0.5"/>
+
+          <!-- PIN: New York -->
+          <g class="pin-group" transform="translate(720, 185)">
+            <circle class="pin-ring" cx="0" cy="0" r="4" fill="none" stroke="#2dd4bf" stroke-width="1.5"/>
+            <circle cx="0" cy="0" r="6" fill="#2dd4bf" opacity="0.9"/>
+            <circle cx="0" cy="0" r="3" fill="#0a1628"/>
+            <g class="pin-tooltip" transform="translate(14, -12)">
+              <rect x="0" y="-10" width="120" height="28" rx="6" fill="rgba(15, 33, 64, 0.95)" stroke="rgba(45, 212, 191, 0.3)" stroke-width="1"/>
+              <text x="10" y="6" fill="#2dd4bf" font-size="11" font-family="Outfit, sans-serif" font-weight="600">New York City</text>
+            </g>
+          </g>
+
+          <!-- PIN: Grand Canyon -->
+          <g class="pin-group" transform="translate(220, 340)">
+            <circle class="pin-ring" cx="0" cy="0" r="4" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+            <circle cx="0" cy="0" r="6" fill="#f59e0b" opacity="0.9"/>
+            <circle cx="0" cy="0" r="3" fill="#0a1628"/>
+            <g class="pin-tooltip" transform="translate(14, -12)">
+              <rect x="0" y="-10" width="120" height="28" rx="6" fill="rgba(15, 33, 64, 0.95)" stroke="rgba(245, 158, 11, 0.3)" stroke-width="1"/>
+              <text x="10" y="6" fill="#f59e0b" font-size="11" font-family="Outfit, sans-serif" font-weight="600">Grand Canyon</text>
+            </g>
+          </g>
+
+          <!-- PIN: Chicago -->
+          <g class="pin-group" transform="translate(540, 200)">
+            <circle class="pin-ring" cx="0" cy="0" r="4" fill="none" stroke="#818cf8" stroke-width="1.5"/>
+            <circle cx="0" cy="0" r="6" fill="#818cf8" opacity="0.9"/>
+            <circle cx="0" cy="0" r="3" fill="#0a1628"/>
+            <g class="pin-tooltip" transform="translate(14, -12)">
+              <rect x="0" y="-10" width="90" height="28" rx="6" fill="rgba(15, 33, 64, 0.95)" stroke="rgba(129, 140, 248, 0.3)" stroke-width="1"/>
+              <text x="10" y="6" fill="#818cf8" font-size="11" font-family="Outfit, sans-serif" font-weight="600">Chicago</text>
+            </g>
+          </g>
+
+          <!-- PIN: San Francisco -->
+          <g class="pin-group" transform="translate(110, 270)">
+            <circle class="pin-ring" cx="0" cy="0" r="4" fill="none" stroke="#22c55e" stroke-width="1.5"/>
+            <circle cx="0" cy="0" r="6" fill="#22c55e" opacity="0.9"/>
+            <circle cx="0" cy="0" r="3" fill="#0a1628"/>
+            <g class="pin-tooltip" transform="translate(14, -12)">
+              <rect x="0" y="-10" width="120" height="28" rx="6" fill="rgba(15, 33, 64, 0.95)" stroke="rgba(34, 197, 94, 0.3)" stroke-width="1"/>
+              <text x="10" y="6" fill="#22c55e" font-size="11" font-family="Outfit, sans-serif" font-weight="600">San Francisco</text>
+            </g>
+          </g>
+
+          <!-- PIN: Miami -->
+          <g class="pin-group" transform="translate(660, 430)">
+            <circle class="pin-ring" cx="0" cy="0" r="4" fill="none" stroke="#f43f5e" stroke-width="1.5"/>
+            <circle cx="0" cy="0" r="6" fill="#f43f5e" opacity="0.9"/>
+            <circle cx="0" cy="0" r="3" fill="#0a1628"/>
+            <g class="pin-tooltip" transform="translate(-110, -12)">
+              <rect x="0" y="-10" width="90" height="28" rx="6" fill="rgba(15, 33, 64, 0.95)" stroke="rgba(244, 63, 94, 0.3)" stroke-width="1"/>
+              <text x="10" y="6" fill="#f43f5e" font-size="11" font-family="Outfit, sans-serif" font-weight="600">Miami</text>
+            </g>
+          </g>
+
+          <!-- Connection lines (artistic) -->
+          <line x1="720" y1="185" x2="540" y2="200" stroke="rgba(45, 212, 191, 0.08)" stroke-width="0.5" stroke-dasharray="4 4"/>
+          <line x1="540" y1="200" x2="220" y2="340" stroke="rgba(245, 158, 11, 0.08)" stroke-width="0.5" stroke-dasharray="4 4"/>
+          <line x1="220" y1="340" x2="110" y2="270" stroke="rgba(34, 197, 94, 0.08)" stroke-width="0.5" stroke-dasharray="4 4"/>
+          <line x1="660" y1="430" x2="720" y2="185" stroke="rgba(244, 63, 94, 0.08)" stroke-width="0.5" stroke-dasharray="4 4"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-label">Features</div>
+  <h2>Everything you need to<br>explore with confidence</h2>
+  <p>A comprehensive toolkit for discovering, planning, and navigating America's most captivating destinations.</p>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon fi-1">🗺️</div>
+      <h3>Interactive US Map</h3>
+      <p>Pan, zoom, and explore a beautifully rendered map of the United States. Every state, every region — right at your fingertips.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-2">📌</div>
+      <h3>Curated Points of Interest</h3>
+      <p>Thousands of handpicked locations from national parks and monuments to hidden local spots that only insiders know about.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-3">🔍</div>
+      <h3>Smart Search & Filters</h3>
+      <p>Find exactly what you're looking for with powerful category filters — nature, history, food, culture, adventure, and more.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-4">📸</div>
+      <h3>Rich Place Details</h3>
+      <p>Every point of interest comes with photos, descriptions, visitor tips, and practical information to plan your visit.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-5">⭐</div>
+      <h3>Save Your Favorites</h3>
+      <p>Bookmark the spots that catch your eye and build your personal bucket list of places to visit across the country.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-6">📱</div>
+      <h3>Works Everywhere</h3>
+      <p>Responsive design that looks beautiful on desktop, tablet, and mobile — explore from wherever you are.</p>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="stat-number">50</div>
+      <div class="stat-label">States Covered</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">10K+</div>
+      <div class="stat-label">Points of Interest</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">25+</div>
+      <div class="stat-label">Categories</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">Free</div>
+      <div class="stat-label">To Get Started</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works" id="how-it-works">
+  <div class="section-label" style="display:flex;justify-content:center;">How It Works</div>
+  <h2>Up and running<br>in 3 simple steps</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <h3>Open the map</h3>
+        <p>Launch PointsOfInterest and you're greeted by a stunning, interactive map of the entire United States — ready to explore.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <h3>Discover places</h3>
+        <p>Browse by region, search by name, or filter by category. Color-coded pins make it easy to spot what interests you most.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <h3>Dive into details</h3>
+        <p>Tap any point to reveal rich information — photos, descriptions, visitor tips, and everything you need to plan your visit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="download">
+  <div class="cta-box">
+    <div class="section-label" style="display:flex;justify-content:center;">Ready?</div>
+    <h2>Start Your<br>Exploration Today</h2>
+    <p>Join thousands of explorers who use PointsOfInterest to discover the best of America.</p>
+    <div class="hero-buttons">
+      <a href="#" class="btn-primary">Download Free →</a>
+      <a href="https://staging.d1jmu3cdhcok4k.amplifyapp.com/signup" class="btn-secondary">View Demo</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">
+    <div class="logo-icon" style="width:28px;height:28px;border-radius:8px;font-size:0.85rem;">📍</div>
+    PointsOfInterest
+  </div>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Contact</a>
+  </div>
+  <p>&copy; 2026 PointsOfInterest. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
