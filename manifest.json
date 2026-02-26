@@ -26,6 +26,15 @@
       "type": "github",
       "file": "installing_python_3.13_windows.md",
       "date": "2026-02"
+    },
+    {
+      "id": "wp-004",
+      "number": "05",
+      "title": "Developer Environment",
+      "description": "SaaS Windows Developer Environment",
+      "type": "github",
+      "file": "saas-dev-environment.md",
+      "date": "2026-02"
     }
   ]
 }
